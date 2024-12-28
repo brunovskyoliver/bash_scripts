@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+connection=$(echo "docker crios ecrios lizard aioso telefon wifi-msite hip hop" | tr ' ' '\n')
+
+selected=$(printf "%s\n" "$connection" | fzf)
+
+if [ "$selected" = "hip" ] || [ "$selected" = "hop" ]; then
+    knock -v hip.net.e-net.sk 5222
+    knock -v hop.net.e-net.sk 5222
+fi
+
+command="scp://${selected}.net.e-net.sk//home/brunovsky/"
+vim "$command"
