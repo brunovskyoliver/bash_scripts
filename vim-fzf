@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/Documents/Programming -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/Documents/Programming -mindepth 1 -maxdepth 4 -type d -name .git -prune -o -type d -print | fzf)
 fi
 
 if [[ -z $selected ]]; then
