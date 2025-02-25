@@ -46,11 +46,25 @@ def process_nytimes(data):
         output += line + "\n"
     sys.stdout.write(output)
 
+def process_wired(data):
+    data = data[data.index("• Coupons")+len("• Coupons\n"):]
+    data = data.split("\n")
+    output = ""
+    for line in data:
+        if "•" in line and not re.match('^.*•.*[0-9]+.*$',line):
+            continue
+        if re.match('(^You Might Also Like*.)',line):
+            break
+        output += line + "\n"
+    sys.stdout.write(output)
+
 if "Denník N" in data:
     process_dennik_n(data)
 elif "CNN" in data:
     process_cnn(data)
 elif "Today’s Paper" in data:
     process_nytimes(data)
+elif "WIRED" in data:
+    process_wired(data)
 else:
     sys.stdout.write(data)
