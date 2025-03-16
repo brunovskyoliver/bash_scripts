@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 
-connection=$(echo "docker crios ecrios lizard aioso telefon wifi-msite hip hop" | tr ' ' '\n')
+connection=$(echo "odoo.local zabbix.local" | tr ' ' '\n')
 
 selected=$(printf "%s\n" "$connection" | fzf)
 
-if [ "$selected" = "hip" ] || [ "$selected" = "hop" ]; then
-    knock -v hip.net.e-net.sk 5222
-    knock -v hop.net.e-net.sk 5222
-fi
+#if [ "$selected" = "hip" ] || [ "$selected" = "hop" ]; then
+#    knock -v hip.net.e-net.sk 5222
+#    knock -v hop.net.e-net.sk 5222
+#fi
 
-command="scp://${selected}.net.e-net.sk//home/brunovsky/"
-vim "$command"
+
+
+dig +short "$selected"
+#command="scp://${selected}.net.e-net.sk//home/brunovsky/"
+if [ -z "$ip" ]; then
+    # Extract IP address from ping output
+    ip=$(ping -c 1 "$selected" 2>/dev/null | head -n 1 | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}')
+
+    # Check if ping resolution was successful
+    if [ -z "$ip" ]; then
+        echo "Could not resolve hostname: $selected"
+        exit 1
+    fi
+fi
+echo $ip > /tmp/last_ip
+nvim -c "DistantConnect ssh://$ip"
+
